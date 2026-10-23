@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FDFDFC">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B0B0A">
+<title>Log in — CrawlBouncer</title>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-card">
+    <a href="/" class="brand"><span class="brand-mark">C</span>CrawlBouncer</a>
+    <h1 style="margin-top:22px">Log in</h1>
+    <p class="lede">Welcome back.</p>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" autocomplete="email" required placeholder="you@yoursite.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" autocomplete="current-password" required placeholder="••••••••">
+      </div>
+      <div class="field" id="mfaField" style="display:none">
+        <label for="mfaCode">Authenticator code</label>
+        <input type="text" id="mfaCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000">
+      </div>
+      <div class="form-error" id="formError"></div>
+      <div id="resendRow" style="display:none; margin-top:10px">
+        <button type="button" class="btn btn-outline btn-block" id="resendBtn">Resend verification email</button>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:22px" id="submitBtn">
+        Log in
+      </button>
+    </form>
+
+    <div class="auth-switch" style="margin-top:12px"><a href="/reset-password.html">Forgot your password?</a></div>
+    <div class="auth-switch">New here? <a href="/signup.html">Create an account</a></div>
+  </div>
+</div>
+
+<script>
+const form = document.getElementById("loginForm");
+const errorBox = document.getElementById("formError");
+const submitBtn = document.getElementById("submitBtn");
+const resendRow = document.getElementById("resendRow");
+const resendBtn = document.getElementById("resendBtn");
+const mfaField = document.getElementById("mfaField");
+const mfaCode = document.getElementById("mfaCode");
+
+function detailMessage(detail, fallback) {
+  if (!detail) return fallback;
+  if (typeof detail === "string") return detail;
+  return detail.message || fallback;
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  errorBox.classList.remove("show");
+  resendRow.style.display = "none";
+  submitBtn.textContent = "Logging in…";
+  submitBtn.disabled = true;
+
+  const body = {
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+  };
+  if (mfaField.style.display !== "none" && mfaCode.value) {
+    body.mfa_code = mfaCode.value;
+  }
+
+  try {
+    const resp = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      const message = detailMessage(data.detail, "Invalid email or password.");
+
+      // "MFA code required" (and "Invalid MFA code") both mean: show
+      // the code field and let them try again — this account has 2FA
+      // on, which login.html previously had no way to even ask for.
+      if (resp.status === 401 && /MFA code/i.test(message)) {
+        mfaField.style.display = "block";
+        setTimeout(() => mfaCode.focus(), 50);
+      }
+      if (resp.status === 403 && data.detail && data.detail.error === "Email not verified") {
+        resendRow.style.display = "block";
+      }
+      throw new Error(message);
+    }
+
+    // The server already set the session as an httpOnly cookie on this
+    // same response — nothing to store client-side.
+    // The dashboard reads who's logged in via /api/auth/me.
+    window.location.href = "/dashboard";
+  } catch (err) {
+    errorBox.textContent = err.message;
+    errorBox.classList.add("show");
+    submitBtn.textContent = "Log in";
+    submitBtn.disabled = false;
+  }
+});
+
+resendBtn.addEventListener("click", async () => {
+  resendBtn.textContent = "Sending…";
+  resendBtn.disabled = true;
+  try {
+    await fetch("/api/auth/resend-verification", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: document.getElementById("email").value }),
+    });
+    errorBox.textContent = "If that email needs verifying, a new link is on its way.";
+    errorBox.classList.add("show");
+    resendRow.style.display = "none";
+  } finally {
+    resendBtn.textContent = "Resend verification email";
+    resendBtn.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>

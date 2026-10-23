@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FDFDFC">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B0B0A">
+<title>Verify your email — CrawlBouncer</title>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-card">
+    <a href="/" class="brand"><span class="brand-mark">C</span>CrawlBouncer</a>
+    <h1 style="margin-top:22px" id="heading">Verifying your email…</h1>
+    <p class="lede" id="lede">One moment.</p>
+
+    <div class="form-error" id="formError"></div>
+
+    <div id="actionRow" style="display:none; margin-top:18px"></div>
+    <div class="auth-switch" id="switchRow"></div>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const token = params.get("token");
+const heading = document.getElementById("heading");
+const lede = document.getElementById("lede");
+const errorBox = document.getElementById("formError");
+const actionRow = document.getElementById("actionRow");
+const switchRow = document.getElementById("switchRow");
+
+async function verify() {
+  if (!token) {
+    heading.textContent = "Invalid link";
+    lede.textContent = "This verification link is missing its token.";
+    switchRow.innerHTML = `<a href="/signup.html">Back to sign up</a>`;
+    return;
+  }
+
+  try {
+    const resp = await fetch("/api/auth/verify-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.detail || "This link is invalid or has expired.");
+
+    // The response already set the session cookie — the account is
+    // now fully usable.
+    heading.textContent = "You're verified";
+    lede.textContent = "Taking you to your dashboard…";
+    setTimeout(() => { window.location.href = "/dashboard"; }, 900);
+  } catch (err) {
+    heading.textContent = "Couldn't verify that link";
+    lede.textContent = err.message;
+    actionRow.style.display = "block";
+    actionRow.innerHTML = `<a href="/login.html" class="btn btn-primary btn-block">Go to login</a>`;
+  }
+}
+
+verify();
+</script>
+
+</body>
+</html>

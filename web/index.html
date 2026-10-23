@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FDFDFC">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B0B0A">
+<title>CrawlBouncer: a bouncer for AI crawlers</title>
+<meta name="description" content="Open-source, self-hosted gatekeeper that lets you allow or block AI crawlers, per site and per path.">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <a href="/" class="brand"><span class="brand-mark">C</span>CrawlBouncer</a>
+    <nav>
+      <a href="#why">Why</a>
+      <a href="#what">What</a>
+      <a href="#setup">Set it up</a>
+      <a href="/login.html">Log in</a>
+    </nav>
+  </div>
+
+  <div class="hero">
+    <h1>A bouncer for your website.<br>The guests are robots.</h1>
+    <p>CrawlBouncer is a free, open-source gateway that sits in front of your site and decides what each AI crawler is allowed to do: come in, or get turned away at the door.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#setup">Set it up</a>
+      <a class="btn btn-outline" href="/signup.html">Create an account</a>
+      <a class="btn btn-outline" href="/api/docs">API docs</a>
+    </div>
+  </div>
+
+  <h2 id="why">Why does this exist?</h2>
+  <p>AI companies send crawlers to read the web, and many of them don't ask first. If you write or publish anything online, you should get to choose who reads it.</p>
+  <p>Tools for this already exist, but they are mostly closed and run on someone else's servers, so you have to trust them. CrawlBouncer is the version you can read, change and host yourself. It is free, it was built to be shared, and contributions are welcome.</p>
+
+  <h2 id="what">What is it?</h2>
+  <p>A small web service (Python + SQLite, plus a React dashboard). Traffic for your domain passes through it. For every visitor it works out: <em>human, ordinary bot, or a named AI crawler?</em> Then it applies your rules.</p>
+  <table class="t">
+    <tr><th>Rule</th><th>What the crawler sees</th></tr>
+    <tr><td><code>allow</code></td><td>The normal page. Come on in.</td></tr>
+    <tr><td><code>block</code></td><td>HTTP 403. Not tonight.</td></tr>
+  </table>
+  <p style="margin-top:14px">Rules can be set per crawler (GPTBot, ClaudeBot, PerplexityBot and friends) and per path (<code>/blog/</code> open, <code>/premium/</code> closed). It also comes with:</p>
+  <ul>
+    <li>a web firewall (SQL injection, XSS and other classics), rate limiting, and traffic-flood detection</li>
+    <li>a dashboard showing who visited and what the bouncer did about it</li>
+    <li>a generated <code>robots.txt</code> that matches your rules</li>
+    <li>a "bolt-on" mode: keep your current setup and just ask CrawlBouncer for a decision (<code>POST /v1/decide</code>)</li>
+    <li>two-factor login, team members, and an audit log</li>
+  </ul>
+  <div class="note"><strong>Be realistic.</strong> This is early software. Crawlers are recognised by their User-Agent, and a determined scraper can fake that. It is a good bouncer, not a bank vault. See <code>docs/KNOWN_LIMITATIONS.md</code> in the repository.</div>
+
+  <h2 id="setup">How to set it up</h2>
+  <p>The easy way uses <a href="https://docs.docker.com/get-docker/">Docker</a>. You need nothing else.</p>
+  <ol class="steps">
+    <li>Get the code and enter the folder:
+<pre><code>git clone https://github.com/nayan-mis/crawlbouncer.git
+cd crawlbouncer</code></pre></li>
+    <li>Create your settings file and open it:
+<pre><code>cp .env.example .env</code></pre>
+      Set <code>JWT_SECRET</code> to a long random value (<code>openssl rand -hex 32</code> makes one). Change <code>ENV</code> to <code>production</code> on a real server.</li>
+    <li>Start it:
+<pre><code>docker compose up -d --build</code></pre></li>
+    <li>Open <a href="/signup.html">/signup.html</a> on that machine (<code>http://localhost:8000/signup.html</code>) and create your account. <strong>The first account becomes the admin</strong>; after that, signups are closed unless you allow them.</li>
+    <li>In the dashboard, go to <strong>Domains → Add domain</strong>. Then choose how traffic reaches CrawlBouncer:
+      <ul>
+        <li><strong>Reverse proxy:</strong> point your domain's DNS (a CNAME) at your CrawlBouncer server and give it your origin URL. Put <a href="https://caddyserver.com/">Caddy</a> in front for automatic HTTPS (a ready example is in <code>deploy/Caddyfile.example</code>).</li>
+        <li><strong>Bolt-on:</strong> no DNS change. Your own server calls <code>POST /v1/decide</code>. Snippets are in <code>integrations/bolt-on/</code>.</li>
+      </ul></li>
+    <li>Open <strong>Crawlers</strong>, pick allow or block for each one, and press save. Done. The bouncer is on shift.</li>
+  </ol>
+
+  <h3>Without Docker</h3>
+<pre><code>cd frontend && npm ci && npm run build && cd ..
+cd backend && pip install -r requirements.txt
+cp ../.env.example ../.env     # edit it, then:
+python run.py</code></pre>
+  <p>Needs Python 3.12 and Node 20. Then open <code>http://localhost:8000</code>.</p>
+
+  <h3>Something not working?</h3>
+  <p>Check <code>docker compose logs crawlbouncer</code> first. Emails (verification, password reset) are printed there too when SMTP isn't set up. Still stuck? Open an issue on the repository, with the log lines and what you expected to happen.</p>
+
+  <footer>
+    CrawlBouncer is open source (MIT licence, free forever). It is not affiliated with any AI company, and no robots were harmed in the making of this project.
+  </footer>
+</div>
+</body>
+</html>

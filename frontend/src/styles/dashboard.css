@@ -1,0 +1,307 @@
+/* ── Reset ──────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:13px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+/* ── Tokens ─────────────────────────────────────── */
+:root{
+  --bg:          #FFFFFF;
+  --surface:     #FAFAFA;
+  --surface-2:   #F3F3F3;
+  --border:      #E8E8E8;
+  --border-2:    #D4D4D4;
+  --t1:          #0A0A0A;
+  --t2:          #6B6B6B;
+  --t3:          #AEAEAE;
+  --t4:          #D0D0D0;
+  --green:       #16A34A;
+  --green-bg:    rgba(22,163,74,.08);
+  --amber:       #B45309;
+  --amber-bg:    rgba(180,83,9,.08);
+  --red:         #DC2626;
+  --red-bg:      rgba(220,38,38,.08);
+  --blue:        #2563EB;
+  --blue-bg:     rgba(37,99,235,.08);
+  --chart-1:     #18181B;
+  --chart-2:     #71717A;
+  --chart-3:     #DC2626;
+  --sidebar:     #FAFAFA;
+  --r:           4px;
+  --font:        'Inter',-apple-system,sans-serif;
+  --mono:        'JetBrains Mono','Fira Code',monospace;
+  --sidebar-w:   216px;
+  --top-h:       44px;
+}
+[data-theme="dark"]{
+  --bg:          #0A0A0A;
+  --surface:     #111111;
+  --surface-2:   #1A1A1A;
+  --border:      #1F1F1F;
+  --border-2:    #2A2A2A;
+  --t1:          #F5F5F5;
+  --t2:          #A1A1AA;
+  --t3:          #52525B;
+  --t4:          #3F3F46;
+  --green:       #22C55E;
+  --green-bg:    rgba(34,197,94,.1);
+  --amber:       #F59E0B;
+  --amber-bg:    rgba(245,158,11,.1);
+  --red:         #F87171;
+  --red-bg:      rgba(248,113,113,.1);
+  --blue:        #60A5FA;
+  --blue-bg:     rgba(96,165,250,.1);
+  --chart-1:     #F5F5F5;
+  --chart-2:     #71717A;
+  --chart-3:     #F87171;
+  --sidebar:     #0D0D0D;
+}
+
+/* ── Base ───────────────────────────────────────── */
+body{background:var(--bg);color:var(--t1);font-family:var(--font);line-height:1.5;transition:background .18s,color .18s}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--font);cursor:pointer}
+input,textarea{font-family:var(--font)}
+
+/* ── Layout ─────────────────────────────────────── */
+.shell{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.topbar{height:var(--top-h);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;gap:12px;background:var(--bg)}
+.content{flex:1;overflow-y:auto;padding:24px}
+
+/* ── Sidebar ─────────────────────────────────────── */
+.sb-logo{display:flex;align-items:center;gap:8px;padding:14px 14px 10px;border-bottom:1px solid var(--border)}
+.sb-logomark{width:20px;height:20px;background:var(--t1);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-logomark svg{width:11px;height:11px;fill:var(--bg)}
+.sb-name{font-weight:600;font-size:13px;letter-spacing:.01em;color:var(--t1)}
+.sb-section{font-size:10.5px;font-weight:500;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;padding:14px 14px 5px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:6px 14px;font-size:12.5px;font-weight:450;color:var(--t2);cursor:pointer;transition:background .1s,color .1s;user-select:none;border:none;background:none;width:100%;text-align:left}
+.sb-item:hover{background:var(--surface-2);color:var(--t1)}
+.sb-item.on{background:var(--surface-2);color:var(--t1);font-weight:500}
+.sb-item svg{width:14px;height:14px;flex-shrink:0;opacity:.7}
+.sb-item.on svg{opacity:1}
+.sb-badge{margin-left:auto;font-size:10.5px;background:var(--surface-2);color:var(--t3);padding:1px 6px;border-radius:3px;border:1px solid var(--border)}
+.sb-foot{margin-top:auto;border-top:1px solid var(--border);padding:10px 14px}
+.sb-domain{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t2);padding:5px 0;cursor:pointer}
+.sb-domain:hover{color:var(--t1)}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.sb-domain-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+
+/* ── Topbar ──────────────────────────────────────── */
+.tb-title{font-size:13px;font-weight:500;color:var(--t1)}
+.tb-right{display:flex;align-items:center;gap:6px}
+.icon-btn{width:28px;height:28px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);transition:all .1s}
+.icon-btn:hover{border-color:var(--border-2);color:var(--t1)}
+.icon-btn svg{width:13px;height:13px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--r);font-size:12.5px;font-weight:450;cursor:pointer;transition:all .12s;border:1px solid transparent;white-space:nowrap;line-height:1.4}
+.btn svg{width:12px;height:12px}
+.btn-default{background:var(--t1);color:var(--bg);border-color:var(--t1)}
+.btn-default:hover{opacity:.82}
+.btn-outline{background:transparent;color:var(--t1);border-color:var(--border)}
+.btn-outline:hover{background:var(--surface-2)}
+.btn-ghost{background:transparent;color:var(--t2);border-color:transparent;padding:5px 8px}
+.btn-ghost:hover{background:var(--surface-2);color:var(--t1)}
+.btn-danger{background:transparent;color:var(--red);border-color:var(--border)}
+.btn-danger:hover{background:var(--red-bg)}
+
+/* ── Section header ──────────────────────────────── */
+.page-header{margin-bottom:20px}
+.page-title{font-size:16px;font-weight:600;letter-spacing:-.015em;color:var(--t1);margin-bottom:2px}
+.page-sub{font-size:12.5px;color:var(--t2)}
+
+/* ── Stat cards ──────────────────────────────────── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.stat-card{background:var(--bg);padding:16px 18px;display:flex;flex-direction:column;gap:10px;transition:background .1s}
+.stat-card:hover{background:var(--surface)}
+.stat-top{display:flex;align-items:center;justify-content:space-between}
+.stat-label{font-size:11.5px;font-weight:450;color:var(--t2);letter-spacing:.01em}
+.stat-trend{font-size:10.5px;font-weight:500;display:flex;align-items:center;gap:2px}
+.stat-trend.up{color:var(--green)}
+.stat-trend.down{color:var(--red)}
+.stat-trend.flat{color:var(--t3)}
+.stat-value{font-size:22px;font-weight:600;color:var(--t1);letter-spacing:-.03em;line-height:1}
+.stat-sparkline{height:28px;opacity:.8}
+.stat-sub{font-size:11px;color:var(--t3)}
+
+/* ── Panel ───────────────────────────────────────── */
+.panel{border:1px solid var(--border);border-radius:var(--r);background:var(--bg);margin-bottom:16px;overflow:hidden}
+.panel-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
+.panel-title{font-size:12.5px;font-weight:500;color:var(--t1)}
+
+/* Secondary, deliberately quieter than .panel — for settings that matter
+   less often than the primary content above them on a page (e.g. Agent
+   Mirror overrides below the main Domains table). Muted background and
+   dashed top border signal "advanced / occasional", not "equally important". */
+.sub-section{margin-top:28px;padding-top:18px;border-top:1px dashed var(--border)}
+.sub-section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px}
+.sub-section-title{font-size:12.5px;font-weight:500;color:var(--t2)}
+.sub-section-tag{font-weight:400;color:var(--t3);font-size:11.5px}
+.sub-section-sub{font-size:11.5px;color:var(--t3);margin-top:3px;max-width:52ch;line-height:1.5}
+.panel-sub{font-size:11.5px;color:var(--t3)}
+.panel-body{padding:16px}
+.panel-controls{display:flex;align-items:center;gap:6px}
+.chart-box{height:200px;position:relative}
+.chart-lg{height:240px;position:relative}
+
+/* ── Grid ────────────────────────────────────────── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid-62{display:grid;grid-template-columns:3fr 2fr;gap:12px}
+.grid-26{display:grid;grid-template-columns:2fr 3fr;gap:12px}
+
+/* ── Table ───────────────────────────────────────── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{padding:8px 14px;text-align:left;font-size:11px;font-weight:500;color:var(--t3);letter-spacing:.04em;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;background:var(--bg)}
+thead th:hover{color:var(--t2)}
+tbody td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--t2);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--surface)}
+td.t1{color:var(--t1);font-weight:500}
+td.mono{font-family:var(--mono);font-size:11.5px}
+.mono{font-family:var(--mono)}
+td.green{color:var(--green);font-weight:500}
+td.right{text-align:right}
+
+/* ── Badge ───────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:2px 7px;border-radius:3px;letter-spacing:.01em;border:1px solid transparent}
+.b-green{background:var(--green-bg);color:var(--green)}
+.b-amber{background:var(--amber-bg);color:var(--amber)}
+.b-red{background:var(--red-bg);color:var(--red)}
+.b-blue{background:var(--blue-bg);color:var(--blue)}
+.b-neutral{background:var(--surface-2);color:var(--t2);border-color:var(--border)}
+
+/* ── Pill tabs ───────────────────────────────────── */
+.pill-tabs{display:flex;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:2px;gap:1px}
+.pill-tab{padding:4px 10px;font-size:12px;font-weight:450;color:var(--t2);border-radius:3px;cursor:pointer;border:none;background:none;font-family:var(--font);transition:all .1s}
+.pill-tab:hover{color:var(--t1)}
+.pill-tab.on{background:var(--bg);color:var(--t1);font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+/* ── Toggle rule ─────────────────────────────────── */
+.rule-toggle{display:flex;border:1px solid var(--border);border-radius:3px;overflow:hidden;background:var(--surface);width:fit-content}
+.rt-opt{padding:3px 9px;font-size:11.5px;font-weight:450;cursor:pointer;color:var(--t2);border:none;background:none;font-family:var(--font);transition:all .1s}
+.rt-opt:hover{color:var(--t1);background:var(--surface-2)}
+.rt-opt.on.g{background:var(--green-bg);color:var(--green)}
+.rt-opt.on.a{background:var(--amber-bg);color:var(--amber)}
+.rt-opt.on.r{background:var(--red-bg);color:var(--red)}
+
+/* ── Input ───────────────────────────────────────── */
+.input{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:6px 10px;font-size:12.5px;color:var(--t1);font-family:var(--font);width:100%;outline:none;transition:border .12s}
+.input:focus{border-color:var(--t1)}
+.input::placeholder{color:var(--t4)}
+/* <select class="input"> — without appearance:none, some browser/OS
+   combinations (verified: WebKitGTK on Linux) render the closed box's
+   selected-option text using native widget theming instead of this
+   class's `color`, which can make it unreadable against a dark
+   background even though every other .input rule (background, border)
+   applies correctly. This affects every <select className="input">
+   in the app (bolt-on mode picker, mirror override mode, path-rule
+   action), not just one — found via a real rendered screenshot, not
+   assumed. The custom arrow replaces the native one appearance:none removes. */
+select.input{appearance:none;-webkit-appearance:none;-moz-appearance:none;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer}
+select.input option{background:var(--surface);color:var(--t1)}
+.input-label{font-size:12px;font-weight:500;color:var(--t2);display:block;margin-bottom:5px}
+.input-hint{font-size:11px;color:var(--t3);margin-top:4px}
+.input-group{margin-bottom:14px}
+
+/* ── Modal ───────────────────────────────────────── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);animation:fadeIn .15s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--bg);border:1px solid var(--border-2);border-radius:6px;width:460px;max-width:calc(100vw - 32px);animation:slideUp .15s;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+@keyframes slideUp{from{transform:translateY(6px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border)}
+.modal-title{font-size:13.5px;font-weight:600;color:var(--t1)}
+.modal-x{width:24px;height:24px;border-radius:3px;border:none;background:transparent;cursor:pointer;color:var(--t3);display:flex;align-items:center;justify-content:center;transition:all .1s}
+.modal-x:hover{background:var(--surface-2);color:var(--t1)}
+.modal-x svg{width:12px;height:12px}
+.modal-bd{padding:18px}
+.modal-ft{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:7px}
+/* Modal buttons are this app's primary touch targets on mobile (the
+   dense .btn used everywhere else — table row actions, etc. — stays
+   as-is; enlarging it globally would be a much bigger design change
+   than this warrants, and those are secondary actions on mobile
+   anyway). Measured at 29px tall / 24x24px for the close icon before
+   this fix — below the 44x44 WCAG/Apple/Material recommended minimum
+   touch target. */
+@media(max-width:680px){
+  .modal-ft .btn{min-height:40px; padding:9px 16px; font-size:13.5px}
+  .modal-x{width:36px; height:36px}
+}
+
+/* ── DNS setup ───────────────────────────────────── */
+.dns-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;font-family:var(--mono);font-size:12px;color:var(--t1);display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}
+.copy-btn{font-size:11px;color:var(--t2);cursor:pointer;padding:2px 7px;border-radius:3px;background:var(--surface-2);border:1px solid var(--border);font-family:var(--font);font-weight:450;white-space:nowrap;transition:all .1s}
+.copy-btn:hover{background:var(--surface-2);color:var(--t1)}
+.dns-row{padding:14px 0;border-bottom:1px solid var(--border)}
+.dns-row:last-child{border-bottom:none}
+.dns-step-num{width:20px;height:20px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:600;color:var(--t2);flex-shrink:0}
+.dns-row-inner{display:flex;gap:12px;align-items:flex-start}
+.dns-label{font-size:12.5px;font-weight:500;margin-bottom:3px;color:var(--t1)}
+.dns-hint{font-size:11.5px;color:var(--t3)}
+
+/* ── Donut legend ────────────────────────────────── */
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--t2)}
+.legend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+
+/* ── Plan card ───────────────────────────────────── */
+
+/* ── Settings section ────────────────────────────── */
+.s-head{font-size:13.5px;font-weight:600;margin-bottom:3px;color:var(--t1)}
+.s-sub{font-size:12px;color:var(--t2);margin-bottom:12px}
+.s-section{margin-bottom:28px}
+hr{border:none;border-top:1px solid var(--border);margin:20px 0}
+
+/* ── Empty ───────────────────────────────────────── */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;gap:8px;text-align:center}
+.empty-icon{width:32px;height:32px;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+.empty-icon svg{width:14px;height:14px;color:var(--t3)}
+.empty-title{font-size:13px;font-weight:500;color:var(--t2)}
+.empty-sub{font-size:12px;color:var(--t3);max-width:260px}
+
+/* ── Filter bar ──────────────────────────────────── */
+.filter-bar{display:flex;gap:8px;margin-bottom:12px;align-items:center}
+.search-input{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:5px 10px;font-size:12.5px;color:var(--t1);font-family:var(--font);outline:none;width:200px;transition:border .12s}
+.search-input:focus{border-color:var(--border-2)}
+.search-input::placeholder{color:var(--t4)}
+
+/* ── Notification ────────────────────────────────── */
+.notif{position:fixed;bottom:18px;right:18px;background:var(--t1);color:var(--bg);border-radius:var(--r);padding:9px 14px;font-size:12.5px;z-index:999;animation:slideUp .15s;pointer-events:none;max-width:300px}
+
+/* ── Live indicator ──────────────────────────────── */
+.live-pill{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--t3)}
+.live-pulse{width:6px;height:6px;border-radius:50%;background:var(--green);position:relative;flex-shrink:0}
+.live-pulse::after{content:'';position:absolute;inset:-2px;border-radius:50%;background:var(--green);opacity:.3;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.3}50%{transform:scale(1.8);opacity:0}}
+
+/* ── Scrollbar ───────────────────────────────────── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:4px}
+
+/* ── Responsive ──────────────────────────────────── */
+@media(max-width:960px){.stat-row{grid-template-columns:1fr 1fr}.grid-62,.grid-26,.grid-3{grid-template-columns:1fr}}
+@media(max-width:680px){.sidebar{display:none}.stat-row{grid-template-columns:1fr 1fr}.content{padding:14px}}
+
+/* Mobile sidebar drawer — the sidebar was fully unreachable below
+   680px (just `display:none`, no replacement), meaning a publisher
+   on a phone could not switch between Domains/Crawlers/WAF/
+   Settings/Dashboard at all once landed on one page, short of
+   editing the URL by hand. Confirmed with a real rendered screenshot
+   before fixing, same as the marketing-site nav issue this mirrors.
+   The .menu-btn hamburger in Topbar opens it as a slide-in drawer
+   with a backdrop, same interaction pattern already used for modals
+   (Modal.jsx) elsewhere in this app. */
+.menu-btn{display:none}
+.sidebar-close{display:none}
+@media(max-width:680px){
+  .menu-btn{display:flex}
+  .sidebar{
+    display:flex; position:fixed; top:0; left:0; bottom:0; z-index:200;
+    transform:translateX(-100%); transition:transform .2s ease;
+    box-shadow:var(--shadow, 0 8px 24px rgba(0,0,0,.3));
+  }
+  .sidebar.mobile-open{transform:translateX(0)}
+  .sidebar-close{display:flex; align-items:center; justify-content:center; margin-left:auto; width:32px; height:32px; background:none; border:none; color:var(--t2); cursor:pointer; padding:0; flex-shrink:0}
+  .sidebar-close svg{width:16px; height:16px}
+  .sidebar-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:190}
+}

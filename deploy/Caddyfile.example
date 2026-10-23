@@ -1,0 +1,15 @@
+# Caddy gets and renews HTTPS certificates for you automatically.
+# Put this in front of CrawlBouncer: replace the hostnames with yours.
+#
+# Dashboard + API:
+bouncer.example.com {
+    reverse_proxy localhost:8000
+}
+
+# A site you want protected (its DNS must point to this machine).
+# CrawlBouncer routes by the Host header, so just forward everything:
+www.your-protected-site.com, your-protected-site.com {
+    reverse_proxy localhost:8000 {
+        header_up Host {host}
+    }
+}

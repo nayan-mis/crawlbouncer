@@ -1,0 +1,21 @@
+# CrawlBouncer: run it with `docker compose up -d --build`
+# 1) cp .env.example .env   and edit it (at least JWT_SECRET)
+# 2) open http://localhost:8000 and create the first account (it becomes admin)
+
+services:
+  crawlbouncer:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: crawlbouncer
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      SQLITE_PATH: /app/data/crawlbouncer.db
+    ports:
+      - "8000:8000"
+    volumes:
+      - crawlbouncer_data:/app/data
+
+volumes:
+  crawlbouncer_data:

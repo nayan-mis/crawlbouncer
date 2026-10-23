@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — CrawlBouncer</title>
+    <script>
+      // Set data-theme before first paint, synchronously — the same
+      // outcome Topbar.jsx's own logic reaches, computed early enough
+      // to avoid a flash of the wrong theme. This used to be hardcoded
+      // as data-theme="dark" directly on <html>, which forced dark for
+      // an instant on every load regardless of the system's actual
+      // color-scheme setting or a previously chosen light preference,
+      // before React mounted and corrected it a moment later.
+      (function () {
+        var stored = localStorage.getItem('cb_theme');
+        var dark = stored ? stored === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

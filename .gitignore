@@ -1,0 +1,20 @@
+# CrawlBouncer: files that should never be committed
+.env
+*.env.local
+*.env.production
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite*
+*.log
+node_modules/
+frontend/dist/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
