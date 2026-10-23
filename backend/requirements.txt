@@ -15,5 +15,5 @@ bcrypt>=4.1,<5          # password hashing (5.x changes long-password behaviour;
 pyotp>=2.9,<3           # TOTP two-factor auth
 httpx>=0.27,<1          # outbound HTTP (origin proxy, mirror, IP lookups)
 apscheduler>=3.10,<4    # background jobs (4.x has a different API)
-scikit-learn>=1.5       # IsolationForest traffic anomaly detector
+scikit-learn>=1.9.1       # IsolationForest traffic anomaly detector
 numpy>=1.26
