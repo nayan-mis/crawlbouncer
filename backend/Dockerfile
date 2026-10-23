@@ -1,7 +1,7 @@
 # Build from the repo root:  docker build -f backend/Dockerfile -t crawlbouncer .
 
 # Stage 1: build the React dashboard
-FROM node:20-slim AS frontend-build
+FROM node:22-slim AS frontend-build
 WORKDIR /frontend
 COPY frontend/package*.json ./
 RUN npm ci

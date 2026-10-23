@@ -69,10 +69,12 @@ class TestPathRuleLookup:
         """Callers that don't have path context (path='') must be
         unaffected by path rules entirely — this is the backward-
         compatibility guarantee for any future caller of get_rule."""
+        # GPTBot's own default is "block", so use an "allow" path rule: if path
+        # rules leaked into a call with no path, the result would flip to "allow".
         client.put("/api/rules/dom-test-001/paths", headers=auth_headers,
-                   json={"path_prefix": "/blog/", "action": "block"})
+                   json={"path_prefix": "/blog/", "action": "allow"})
         rule = get_rule("dom-test-001", "GPTBot")
-        assert rule["action"] != "block"
+        assert rule["action"] == "block"
 
 
 class TestPathRuleAPI:

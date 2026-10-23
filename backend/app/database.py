@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS publishers (
     mfa_secret TEXT,
     mfa_pending_secret TEXT,
     mfa_enabled INTEGER DEFAULT 0,
+    mfa_last_step INTEGER,                -- last TOTP step used (replay protection)
     created_at   TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at   TEXT DEFAULT CURRENT_TIMESTAMP
 );

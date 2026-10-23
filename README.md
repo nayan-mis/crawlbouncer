@@ -59,7 +59,7 @@ You get `{"action":"block", ...}` (GPTBot is blocked by default; ChatGPT-User is
 
 ### Without Docker
 
-Needs Python 3.12 and Node 20.
+Needs Python 3.12 and Node 22.
 
 ```bash
 cd frontend && npm ci && npm run build && cd ..

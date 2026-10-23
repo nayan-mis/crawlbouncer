@@ -78,7 +78,7 @@ cd crawlbouncer</code></pre></li>
 cd backend && pip install -r requirements.txt
 cp ../.env.example ../.env     # edit it, then:
 python run.py</code></pre>
-  <p>Needs Python 3.12 and Node 20. Then open <code>http://localhost:8000</code>.</p>
+  <p>Needs Python 3.12 and Node 22. Then open <code>http://localhost:8000</code>.</p>
 
   <h3>Something not working?</h3>
   <p>Check <code>docker compose logs crawlbouncer</code> first. Emails (verification, password reset) are printed there too when SMTP isn't set up. Still stuck? Open an issue on the repository, with the log lines and what you expected to happen.</p>

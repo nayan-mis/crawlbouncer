@@ -49,7 +49,7 @@ class Config:
     # ── Security ────────────────────────────────────────────────
     # If JWT_SECRET is not set we generate a random one at startup: safe, but
     # everyone is logged out on each restart, so set it for real use.
-    JWT_SECRET: str = os.getenv("JWT_SECRET") or secrets.token_urlsafe(48)
+    JWT_SECRET: str = os.getenv("JWT_SECRET") or ("auto-" + secrets.token_urlsafe(48))
     JWT_EXPIRE_HOURS: int = int(os.getenv("JWT_EXPIRE_HOURS", 24))
     MFA_ENCRYPTION_KEY: str = os.getenv("MFA_ENCRYPTION_KEY", "")
 
@@ -122,16 +122,16 @@ class Config:
         if not self.is_production:
             return []
         problems = []
-        if not os.getenv("JWT_SECRET"):
+        if self.JWT_SECRET.startswith("auto-"):
             problems.append("JWT_SECRET is not set. Generate one with `openssl rand -hex 32`.")
-        if self.JWT_SECRET == "CHANGE_THIS_IN_PRODUCTION_USE_64_RANDOM_CHARS":
+        elif self.JWT_SECRET == "CHANGE_THIS_IN_PRODUCTION_USE_64_RANDOM_CHARS":
             problems.append(
-                "JWT_SECRET is still the placeholder. Set a random value "
+                "JWT_SECRET is still the default placeholder. Set a random value "
                 "(e.g. `openssl rand -hex 32`)."
             )
         elif len(self.JWT_SECRET) < 32:
             problems.append(
-                f"JWT_SECRET is only {len(self.JWT_SECRET)} characters. Use at least 32."
+                f"JWT_SECRET is too short ({len(self.JWT_SECRET)} characters). Use at least 32."
             )
         return problems
 
