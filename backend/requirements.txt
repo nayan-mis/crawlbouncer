@@ -6,7 +6,7 @@
 # Run `pip-audit -r requirements.txt` now and then to check for known CVEs.
 
 fastapi>=0.110,<1
-uvicorn[standard]>=0.30,<1
+uvicorn[standard]>=0.54.0,<1
 python-multipart>=0.0.9
 pydantic[email]>=2.7,<3
 
