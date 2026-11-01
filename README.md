@@ -13,23 +13,59 @@ CrawlBouncer is a free, self-hosted gateway that sits in front of your site and 
 > Status: early, honest software. It is a good bouncer, not a bank vault.
 > Read [docs/KNOWN_LIMITATIONS.md](docs/KNOWN_LIMITATIONS.md) before you bet anything on it.
 
-## Why this exists
+## The night shift
 
-AI companies crawl the web whether or not you agreed to it. Most tools that help are closed and run on someone else's servers. CrawlBouncer is the one you can read, change and run yourself.
+Most websites never had a doorman. Then AI companies started sending crawlers around the web — whether the owner asked them to or not.
 
-## What you get
+If you write or publish anything online, you should get to choose who reads it.
 
-| Feature | In one line |
+Tools for this already exist, but most are closed and run on someone else's servers. CrawlBouncer is the one you can read, change and run yourself.
+
+## Who gets in
+
+The bouncer keeps a guest list, and it's really two lists in one.
+
+- **Per crawler.** `allow` / `block` for GPTBot, ClaudeBot, PerplexityBot, Bytespider, CCBot and more — each crawler tagged with a risk rating.
+- **Per path.** `/blog/` open, `/premium/` closed — whatever you like.
+
+The defaults are opinionated but sane: bulk training scrapers get the door shut by default; bots that fetch a page because a human asked an assistant (and usually send the answer back to that human) get in.
+
+## What the bouncer checks
+
+| Check | What it does |
 |---|---|
-| **Per-crawler rules** | `allow` / `block` for GPTBot, ClaudeBot, PerplexityBot, Bytespider, CCBot and more |
-| **Per-path rules** | `/blog/` open, `/premium/` closed, whatever you like |
-| **Two ways to deploy** | *Reverse proxy* (point DNS at it) or *bolt-on* (your server asks `POST /v1/decide`) |
-| **Web firewall (WAF)** | Blocks SQL injection, XSS, path traversal and similar classics |
-| **Traffic defences** | Rate limiting, flood detection, IP reputation, Tor detection, optional ML anomaly check |
-| **Dashboard** | Who visited, which bots, what the bouncer did |
-| **robots.txt generator** | Always matches your rules |
-| **Agent Mirror** *(optional)* | Serve allowed crawlers a clean text version of a page |
-| **Accounts** | Two-factor login, team members, audit log |
+| **Web firewall** | Blocks SQL injection, XSS, path traversal and similar classics |
+| **Challenge** | Lets through visitors who already passed a challenge |
+| **IP reputation** | Tor list, plus optional AbuseIPDB |
+| **Flood detection** | Slows down / stops traffic floods |
+| **Bot detection** | Tells human, generic bot, or named AI crawler apart |
+| **Risk ladder** | `allow` / `challenge` / `block` for non-crawler traffic |
+| **Rate limiting** | Caps how fast a visitor (or IP) can hit you |
+| **Crawler rules** | The final `allow` / `block`, per crawler and per path |
+| **Pass through** | Forwards to your origin (SSRF-safe) |
+
+## Two ways in
+
+### Reverse proxy
+You point your domain's DNS at CrawlBouncer and it stands at the door. Full pipeline, all checks.
+
+### Bolt-on
+You keep your own stack and just ask CrawlBouncer for a decision: `POST /v1/decide` runs the bot detection and crawler rules and returns the call.
+
+## Back office
+
+- **Dashboard** — who visited, which bots, what the bouncer did
+- **robots.txt generator** — always matches your rules
+- **Agent Mirror** *(optional)* — serve allowed crawlers a clean text version of a page
+- **Accounts** — two-factor login, team members, audit log
+
+## Honest limitations
+
+- Crawlers are recognised by User-Agent only; a scraper can lie. Real verification (published IP ranges, reverse DNS, or the HTTP Message Signatures / "Web Bot Auth" standard) isn't implemented yet.
+- `Google-Extended` and `Applebot-Extended` are robots.txt tokens, not User-Agents — they can only be controlled through the generated `robots.txt`.
+- Unknown bots (curl, headless browsers, scripts) fall to the generic risk/rate-limit ladder, not per-crawler rules.
+- Bolt-on mode only classifies named AI crawlers; WAF, rate limiting and flood protection aren't applied there by design (your CDN does that).
+- SQLite, one process — fine for one server; run one worker.
 
 ## Quick start (Docker)
 
