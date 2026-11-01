@@ -6,7 +6,7 @@
 
 **A bouncer for your website. The guests are robots.**
 
-CrawlBouncer is a free, self-hosted gateway that sits in front of your site and decides, per AI crawler and per path, whether to **allow** it or **block** it. It comes with a dashboard, a web firewall, rate limiting and a `robots.txt` generator.
+**Description:** CrawlBouncer is a free, self-hosted gateway that sits in front of your site and decides, per AI crawler and per path, whether to **allow** it or **block** it. It comes with a dashboard, a web firewall, rate limiting and a `robots.txt` generator.
 
 **Free and open source. No hosted service, no telemetry.** You run it, you own it.
 
