@@ -1,8 +1,4 @@
-# 🚪 CrawlBouncer
-
-[![CI](https://github.com/nayan-mis/crawlbouncer/actions/workflows/ci.yml/badge.svg)](https://github.com/nayan-mis/crawlbouncer/actions/workflows/ci.yml)
-![License: MIT](https://img.shields.io/badge/license-MIT-green)
-![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
+# CrawlBouncer
 
 **A bouncer for your website. The guests are robots.**
 
